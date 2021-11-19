@@ -3,23 +3,19 @@ import { get } from 'lodash';
 import { ROMAN_NUMERALS, ROMAN_NUMERALS_MATRIX } from '../const/roman-numerals';
 
 class RomanNumerals {
-	static toRoman(arabicNumber) {
-		function recurToRoman(remainder, numeralsMap, romanNumberResult) {
-			if (!remainder) {
-				return romanNumberResult;
-			}
+	static toRoman(remainder, numeralsMap = ROMAN_NUMERALS_MATRIX, romanNumberResult = '') {
+		if (!remainder) {
+			return romanNumberResult;
+		}
 
-			const [[romanValue, arabicValue], ...tail] = numeralsMap;
-			const romanNumber = romanNumberResult + romanValue.repeat(remainder / arabicValue);
+		const [[romanValue, arabicValue], ...tail] = numeralsMap;
+		const romanNumber = romanNumberResult + romanValue.repeat(remainder / arabicValue);
 
-			return recurToRoman(remainder % arabicValue, tail, romanNumber);
-		};
-
-		return recurToRoman(arabicNumber, ROMAN_NUMERALS_MATRIX, '');
+		return this.toRoman(remainder % arabicValue, tail, romanNumber);
 	}
 
 	static fromRoman(romanNumber) {
-		const terms = new String(romanNumber)
+		const terms = romanNumber
 			.split('')
 			.reverse()
 			.map((char) => ROMAN_NUMERALS[char]);
